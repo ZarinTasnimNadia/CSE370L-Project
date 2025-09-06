@@ -1,0 +1,623 @@
+-- phpMyAdmin SQL Dump
+-- version 5.2.1
+-- https://www.phpmyadmin.net/
+--
+-- Host: 127.0.0.1
+-- Generation Time: Sep 01, 2025 at 02:37 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `gottacatchemall`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `accepted_bids`
+--
+
+CREATE TABLE `accepted_bids` (
+  `id` int(11) NOT NULL,
+  `auction_id` int(11) NOT NULL,
+  `bidder_id` int(11) NOT NULL,
+  `bid_amount` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `auction`
+--
+
+CREATE TABLE `auction` (
+  `auction_id` int(11) NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `starting_bid` decimal(10,2) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `battle`
+--
+
+CREATE TABLE `battle` (
+  `battle_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `date` datetime DEFAULT current_timestamp(),
+  `winner` int(11) DEFAULT NULL,
+  `loser` int(11) DEFAULT NULL,
+  `status` enum('ongoing','finished') DEFAULT 'ongoing',
+  `player1_score` int(11) DEFAULT 0,
+  `player2_score` int(11) DEFAULT 0,
+  `current_turn` int(11) DEFAULT NULL,
+  `current_move` varchar(50) DEFAULT NULL,
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `battle`
+--
+
+INSERT INTO `battle` (`battle_id`, `amount`, `date`, `winner`, `loser`, `status`, `player1_score`, `player2_score`, `current_turn`, `current_move`, `updated_at`) VALUES
+(1, 50.00, '2025-08-25 10:00:00', 1, 2, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(2, 30.00, '2025-08-26 14:30:00', 3, 4, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(3, 40.00, '2025-08-27 16:45:00', 2, 1, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(4, 25.00, '2025-08-28 12:20:00', 7, 8, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(5, 60.00, '2025-08-28 18:10:00', 9, 10, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(6, 35.00, '2025-08-29 09:15:00', 4, 3, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(7, 20.00, '2025-08-29 11:50:00', 1, 3, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(8, 45.00, '2025-08-29 13:05:00', 8, 7, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(9, 55.00, '2025-08-29 15:40:00', 10, 9, 'finished', 0, 0, NULL, NULL, '2025-08-30 15:48:24'),
+(10, 70.00, '2025-08-30 02:33:58', 10, 9, 'finished', 0, 0, NULL, NULL, '2025-08-30 14:32:53');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `bids_in`
+--
+
+CREATE TABLE `bids_in` (
+  `user_id` int(11) NOT NULL,
+  `auction_id` int(11) NOT NULL,
+  `bid_amount` decimal(10,2) NOT NULL,
+  `timestamp` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `card`
+--
+
+CREATE TABLE `card` (
+  `card_id` int(11) NOT NULL,
+  `name` varchar(100) DEFAULT NULL,
+  `value` decimal(10,2) DEFAULT NULL,
+  `normal` tinyint(1) DEFAULT NULL,
+  `golden` tinyint(1) DEFAULT NULL,
+  `holographic` tinyint(1) DEFAULT NULL,
+  `owner_id` int(11) DEFAULT NULL,
+  `trade_id` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `card`
+--
+
+INSERT INTO `card` (`card_id`, `name`, `value`, `normal`, `golden`, `holographic`, `owner_id`, `trade_id`) VALUES
+(1, 'Pikachu', 25.00, 1, 0, 0, 2, NULL),
+(2, 'Charizard', 85.00, 0, 0, 1, 2, NULL),
+(3, 'Bulbasaur', 15.00, 1, 0, 0, 2, NULL),
+(4, 'Squirtle', 18.00, 1, 0, 0, 2, NULL),
+(5, 'Jigglypuff', 12.00, 1, 0, 0, 2, NULL),
+(6, 'Eevee', 20.00, 1, 0, 0, 3, NULL),
+(7, 'Vaporeon', 45.00, 0, 1, 0, 3, NULL),
+(8, 'Jolteon', 42.00, 0, 1, 0, 3, NULL),
+(9, 'Flareon', 40.00, 0, 1, 0, 3, NULL),
+(10, 'Mewtwo', 95.00, 0, 0, 1, 3, NULL),
+(11, 'Snorlax', 55.00, 1, 0, 0, 4, NULL),
+(12, 'Gyarados', 48.00, 1, 0, 0, 4, NULL),
+(13, 'Dragonite', 75.00, 0, 0, 1, 4, NULL),
+(14, 'Gengar', 38.00, 1, 0, 0, 4, NULL),
+(15, 'Alakazam', 42.00, 0, 1, 0, 4, NULL),
+(16, 'Machop', 15.00, 1, 0, 0, 7, NULL),
+(17, 'Geodude', 12.00, 1, 0, 0, 7, NULL),
+(18, 'Abra', 18.00, 1, 0, 0, 7, NULL),
+(19, 'Growlithe', 22.00, 1, 0, 0, 7, NULL),
+(20, 'Ponyta', 20.00, 1, 0, 0, 7, NULL),
+(21, 'Magikarp', 5.00, 1, 0, 0, 8, NULL),
+(22, 'Psyduck', 16.00, 1, 0, 0, 8, NULL),
+(23, 'Poliwag', 14.00, 1, 0, 0, 8, NULL),
+(24, 'Tentacool', 15.00, 1, 0, 0, 8, NULL),
+(25, 'Slowpoke', 17.00, 1, 0, 0, 8, NULL),
+(26, 'Magnemite', 16.00, 1, 0, 0, 9, NULL),
+(27, 'Voltorb', 15.00, 1, 0, 0, 9, NULL),
+(28, 'Electrode', 35.00, 0, 1, 0, 9, NULL),
+(29, 'Cubone', 18.00, 1, 0, 0, 9, NULL),
+(30, 'Marowak', 38.00, 0, 1, 0, 9, NULL),
+(31, 'Hitmonlee', 45.00, 1, 0, 0, 10, NULL),
+(32, 'Hitmonchan', 45.00, 1, 0, 0, 10, NULL),
+(33, 'Lickitung', 25.00, 1, 0, 0, 10, NULL),
+(34, 'Koffing', 16.00, 1, 0, 0, 10, NULL),
+(35, 'Rhyhorn', 22.00, 1, 0, 0, 10, NULL),
+(36, 'Charmander', 20.00, 1, 0, 0, 1, NULL),
+(37, 'Charmeleon', 45.00, 0, 1, 0, 1, NULL),
+(38, 'Charizard', 85.00, 0, 0, 1, 1, NULL),
+(39, 'Vulpix', 18.00, 1, 0, 0, 1, NULL),
+(40, 'Ninetales', 55.00, 0, 1, 0, 1, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `challenge`
+--
+
+CREATE TABLE `challenge` (
+  `battle_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `status` enum('queued','match_found') DEFAULT 'queued'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `challenge`
+--
+
+INSERT INTO `challenge` (`battle_id`, `user_id`, `card_id`, `status`) VALUES
+(10, 9, 26, 'match_found'),
+(10, 10, 31, 'match_found');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notifications`
+--
+
+CREATE TABLE `notifications` (
+  `notification_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `type` enum('wishlist_trade','wishlist_auction','trade_offer','auction_won') NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `related_id` int(11) DEFAULT NULL,
+  `is_read` tinyint(1) DEFAULT 0,
+  `created_at` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `notify`
+--
+
+CREATE TABLE `notify` (
+  `user_id` int(11) NOT NULL,
+  `auction_id` int(11) NOT NULL,
+  `wishlist_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `participates_in`
+--
+
+CREATE TABLE `participates_in` (
+  `trade_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `reward`
+--
+
+CREATE TABLE `reward` (
+  `reward_id` int(11) NOT NULL,
+  `value` decimal(10,2) NOT NULL,
+  `Card` int(11) DEFAULT NULL,
+  `Token` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trade`
+--
+
+CREATE TABLE `trade` (
+  `trade_id` int(11) NOT NULL,
+  `start_time` datetime NOT NULL,
+  `end_time` datetime NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `description` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `trade`
+--
+
+INSERT INTO `trade` (`trade_id`, `start_time`, `end_time`, `user_id`, `card_id`, `description`) VALUES
+(1, '2025-08-29 10:00:00', '2025-09-05 10:00:00', 2, 1, 'Looking to trade my Pikachu for any electric type'),
+(2, '2025-08-29 11:30:00', '2025-09-05 11:30:00', 3, 7, 'Golden Vaporeon - open to trades or cash offers'),
+(3, '2025-08-29 14:15:00', '2025-09-05 14:15:00', 4, 11, 'Snorlax for trade - looking for good offers'),
+(4, '2025-08-30 09:20:00', '2025-09-06 09:20:00', 7, 16, 'Machop available for trade - looking for fighting types'),
+(5, '2025-08-30 12:45:00', '2025-09-06 12:45:00', 8, 22, 'Psyduck for trade - want water type in return');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `trade_offers`
+--
+
+CREATE TABLE `trade_offers` (
+  `user_id` int(11) NOT NULL,
+  `trade_id` int(11) NOT NULL,
+  `offered_card_id` int(11) NOT NULL,
+  `additional_money` decimal(10,2) DEFAULT 0.00,
+  `timestamp` datetime DEFAULT current_timestamp(),
+  `status` enum('pending','accepted','declined') DEFAULT 'pending'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `user_id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `email` varchar(100) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `balance` decimal(10,2) DEFAULT 0.00,
+  `join_date` date DEFAULT curdate(),
+  `chatuser_id` int(11) DEFAULT NULL,
+  `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `last_login` date DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `name`, `email`, `password`, `balance`, `join_date`, `chatuser_id`, `timestamp`, `last_login`) VALUES
+(1, 'Maria', 'maria@example.com', 'a_very_secure_password', 0.00, '2025-08-19', NULL, '2025-08-18 19:35:22', NULL),
+(2, 'John Doe', 'john.d@example.com', 'password123', 150.00, '2025-08-19', NULL, '2025-08-29 08:21:41', '2025-08-29'),
+(3, 'Jane Smith', 'jane.s@example.com', 'another_pass', 125.50, '2025-08-19', NULL, '2025-08-29 15:55:08', '2025-08-29'),
+(4, 'Peter Jones', 'p.jones@example.com', 'best_pass_ever', 100.00, '2025-08-19', NULL, '2025-08-18 19:41:38', NULL),
+(7, 'alu', 'alu@gmail.com', 'helloalu', 100.00, '2025-08-29', NULL, '2025-08-29 08:19:17', '2025-08-29'),
+(8, 'maomao', 'mao@gmail.com', 'alumao', 100.00, '2025-08-29', NULL, '2025-08-29 15:53:40', '2025-08-29'),
+(9, 'saihan', 'saihan@gmail.com', 'saihanposa', 300.00, '2025-08-29', NULL, '2025-09-01 12:29:33', '2025-09-01'),
+(10, 'mehu', 'mehu@gmail.com', 'mehu', 200.00, '2025-08-29', NULL, '2025-08-29 20:18:42', '2025-08-30'),
+(11, 'maomao@gmail.com', 'maomao@gmail.com', 'maomao@gmail.com', 100.00, '2025-08-30', NULL, '2025-08-30 14:16:21', '2025-08-30');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wins`
+--
+
+CREATE TABLE `wins` (
+  `user_id` int(11) NOT NULL,
+  `reward_id` int(11) NOT NULL,
+  `battle_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `wishlist`
+--
+
+CREATE TABLE `wishlist` (
+  `wishlist_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `card_id` int(11) NOT NULL,
+  `date_created` datetime DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `accepted_bids`
+--
+ALTER TABLE `accepted_bids`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `auction_id` (`auction_id`),
+  ADD KEY `bidder_id` (`bidder_id`);
+
+--
+-- Indexes for table `auction`
+--
+ALTER TABLE `auction`
+  ADD PRIMARY KEY (`auction_id`),
+  ADD KEY `fk_auction_user` (`user_id`),
+  ADD KEY `fk_auction_card` (`card_id`);
+
+--
+-- Indexes for table `battle`
+--
+ALTER TABLE `battle`
+  ADD PRIMARY KEY (`battle_id`),
+  ADD KEY `fk_battle_current_turn` (`current_turn`);
+
+--
+-- Indexes for table `bids_in`
+--
+ALTER TABLE `bids_in`
+  ADD PRIMARY KEY (`user_id`,`auction_id`),
+  ADD KEY `auction_id` (`auction_id`);
+
+--
+-- Indexes for table `card`
+--
+ALTER TABLE `card`
+  ADD PRIMARY KEY (`card_id`),
+  ADD KEY `fk_owner` (`owner_id`),
+  ADD KEY `fk_trade` (`trade_id`);
+
+--
+-- Indexes for table `challenge`
+--
+ALTER TABLE `challenge`
+  ADD PRIMARY KEY (`battle_id`,`user_id`),
+  ADD KEY `fk_challenge_user` (`user_id`),
+  ADD KEY `fk_challenge_card` (`card_id`);
+
+--
+-- Indexes for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD PRIMARY KEY (`notification_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `is_read` (`is_read`),
+  ADD KEY `created_at` (`created_at`);
+
+--
+-- Indexes for table `notify`
+--
+ALTER TABLE `notify`
+  ADD PRIMARY KEY (`user_id`,`auction_id`,`wishlist_id`),
+  ADD KEY `auction_id` (`auction_id`),
+  ADD KEY `wishlist_id` (`wishlist_id`);
+
+--
+-- Indexes for table `participates_in`
+--
+ALTER TABLE `participates_in`
+  ADD PRIMARY KEY (`trade_id`,`user_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Indexes for table `reward`
+--
+ALTER TABLE `reward`
+  ADD PRIMARY KEY (`reward_id`),
+  ADD KEY `Card` (`Card`);
+
+--
+-- Indexes for table `trade`
+--
+ALTER TABLE `trade`
+  ADD PRIMARY KEY (`trade_id`),
+  ADD KEY `fk_trade_user` (`user_id`),
+  ADD KEY `fk_trade_card` (`card_id`);
+
+--
+-- Indexes for table `trade_offers`
+--
+ALTER TABLE `trade_offers`
+  ADD PRIMARY KEY (`user_id`,`trade_id`),
+  ADD KEY `trade_id` (`trade_id`),
+  ADD KEY `offered_card_id` (`offered_card_id`);
+
+--
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`user_id`),
+  ADD UNIQUE KEY `email` (`email`),
+  ADD KEY `fk_chatuser` (`chatuser_id`);
+
+--
+-- Indexes for table `wins`
+--
+ALTER TABLE `wins`
+  ADD PRIMARY KEY (`user_id`,`reward_id`,`battle_id`),
+  ADD KEY `reward_id` (`reward_id`),
+  ADD KEY `battle_id` (`battle_id`);
+
+--
+-- Indexes for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD PRIMARY KEY (`wishlist_id`),
+  ADD UNIQUE KEY `user_id` (`user_id`,`card_id`),
+  ADD KEY `card_id` (`card_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `accepted_bids`
+--
+ALTER TABLE `accepted_bids`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `auction`
+--
+ALTER TABLE `auction`
+  MODIFY `auction_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `battle`
+--
+ALTER TABLE `battle`
+  MODIFY `battle_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `notifications`
+--
+ALTER TABLE `notifications`
+  MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `reward`
+--
+ALTER TABLE `reward`
+  MODIFY `reward_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `trade`
+--
+ALTER TABLE `trade`
+  MODIFY `trade_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+
+--
+-- AUTO_INCREMENT for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  MODIFY `wishlist_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `accepted_bids`
+--
+ALTER TABLE `accepted_bids`
+  ADD CONSTRAINT `accepted_bids_ibfk_1` FOREIGN KEY (`auction_id`) REFERENCES `auction` (`auction_id`),
+  ADD CONSTRAINT `accepted_bids_ibfk_2` FOREIGN KEY (`bidder_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `auction`
+--
+ALTER TABLE `auction`
+  ADD CONSTRAINT `fk_auction_card` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`),
+  ADD CONSTRAINT `fk_auction_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `battle`
+--
+ALTER TABLE `battle`
+  ADD CONSTRAINT `fk_battle_current_turn` FOREIGN KEY (`current_turn`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `bids_in`
+--
+ALTER TABLE `bids_in`
+  ADD CONSTRAINT `bids_in_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `bids_in_ibfk_2` FOREIGN KEY (`auction_id`) REFERENCES `auction` (`auction_id`);
+
+--
+-- Constraints for table `card`
+--
+ALTER TABLE `card`
+  ADD CONSTRAINT `fk_owner` FOREIGN KEY (`owner_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `fk_trade` FOREIGN KEY (`trade_id`) REFERENCES `trade` (`trade_id`);
+
+--
+-- Constraints for table `challenge`
+--
+ALTER TABLE `challenge`
+  ADD CONSTRAINT `fk_challenge_battle` FOREIGN KEY (`battle_id`) REFERENCES `battle` (`battle_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_challenge_card` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_challenge_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notifications`
+--
+ALTER TABLE `notifications`
+  ADD CONSTRAINT `fk_notification_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notify`
+--
+ALTER TABLE `notify`
+  ADD CONSTRAINT `notify_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `notify_ibfk_2` FOREIGN KEY (`auction_id`) REFERENCES `auction` (`auction_id`),
+  ADD CONSTRAINT `notify_ibfk_3` FOREIGN KEY (`wishlist_id`) REFERENCES `wishlist` (`wishlist_id`);
+
+--
+-- Constraints for table `participates_in`
+--
+ALTER TABLE `participates_in`
+  ADD CONSTRAINT `participates_in_ibfk_1` FOREIGN KEY (`trade_id`) REFERENCES `trade` (`trade_id`),
+  ADD CONSTRAINT `participates_in_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `reward`
+--
+ALTER TABLE `reward`
+  ADD CONSTRAINT `reward_ibfk_1` FOREIGN KEY (`Card`) REFERENCES `card` (`card_id`);
+
+--
+-- Constraints for table `trade`
+--
+ALTER TABLE `trade`
+  ADD CONSTRAINT `fk_trade_card` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_trade_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `trade_offers`
+--
+ALTER TABLE `trade_offers`
+  ADD CONSTRAINT `trade_offers_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `trade_offers_ibfk_2` FOREIGN KEY (`trade_id`) REFERENCES `trade` (`trade_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `trade_offers_ibfk_3` FOREIGN KEY (`offered_card_id`) REFERENCES `card` (`card_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `users`
+--
+ALTER TABLE `users`
+  ADD CONSTRAINT `fk_chatuser` FOREIGN KEY (`chatuser_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Constraints for table `wins`
+--
+ALTER TABLE `wins`
+  ADD CONSTRAINT `wins_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  ADD CONSTRAINT `wins_ibfk_2` FOREIGN KEY (`reward_id`) REFERENCES `reward` (`reward_id`),
+  ADD CONSTRAINT `wins_ibfk_3` FOREIGN KEY (`battle_id`) REFERENCES `battle` (`battle_id`);
+
+--
+-- Constraints for table `wishlist`
+--
+ALTER TABLE `wishlist`
+  ADD CONSTRAINT `wishlist_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `wishlist_ibfk_2` FOREIGN KEY (`card_id`) REFERENCES `card` (`card_id`) ON DELETE CASCADE;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
